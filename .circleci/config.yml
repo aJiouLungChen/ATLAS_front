@@ -1,0 +1,13 @@
+version: 2.1
+
+jobs:
+  echo:
+    docker:
+      - image: cimg/ruby:3.1.1
+    steps:
+      - run: echo "Ruby docker is ready"
+
+workflows:
+  hello_world:
+    jobs:
+      - echo
