@@ -1,13 +1,64 @@
 version: 2.1
 
-jobs:
-  echo:
-    docker:
-      - image: cimg/ruby:3.1.1
+parameters:
+  application_home:
+    type: string
+    default: ~/atlas
+
+  server_docker_image:
+    type: string
+    default: cimg/ruby:3.1.1
+
+  server_cache_key:
+    type: string
+    default: server-{{ checksum "server/Gemfile" }}-{{ checksum "server/Gemfile.lock" }}
+
+  server_cache_path:
+    type: string
+    default: ~/cache/server
+
+commands:
+  server_setup:
     steps:
-      - run: echo "Ruby docker is ready"
+      - checkout
+      - restore_cache:
+          key: << pipeline.parameters.server_cache_key >>
+      - run:
+          working_directory: server
+          command: bundle config set --local path << pipeline.parameters.server_cache_path >>
+      - run:
+          working_directory: server
+          command: bundle install
+
+server_job_attributes: &server_job_attributes
+  working_directory: << pipeline.parameters.application_home >>
+  docker:
+    - image: << pipeline.parameters.server_docker_image >>
+
+jobs:
+  server_build:
+    <<: *server_job_attributes
+
+    steps:
+      - server_setup
+      - save_cache:
+          key: << pipeline.parameters.server_cache_key >>
+          paths:
+            - << pipeline.parameters.server_cache_path >>
+
+  server_code_analysis:
+    <<: *server_job_attributes
+
+    steps:
+      - server_setup
+      - run:
+          working_directory: server
+          command: bundle exec rubocop
 
 workflows:
-  hello_world:
+  server:
     jobs:
-      - echo
+      - server_build
+      - server_code_analysis:
+          requires:
+            - server_build
