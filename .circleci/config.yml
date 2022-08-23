@@ -1,10 +1,9 @@
 version: 2.1
 
-parameters:
-  application_home:
-    type: string
-    default: ~/atlas
+orbs:
+  ruby: circleci/ruby@1.8.0
 
+parameters:
   server_docker_image:
     type: string
     default: cimg/ruby:3.1.1
@@ -13,52 +12,77 @@ parameters:
     type: string
     default: server-{{ checksum "server/Gemfile" }}-{{ checksum "server/Gemfile.lock" }}
 
-  server_cache_path:
+  db_docker_image:
     type: string
-    default: ~/cache/server
+    default: cimg/postgres:14.4
+
+executors:
+  server:
+    docker:
+      - image: << pipeline.parameters.server_docker_image >>
+
+  server_with_db:
+    docker:
+      - image: << pipeline.parameters.server_docker_image >>
+      - image: << pipeline.parameters.db_docker_image >>
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: server_test
+    environment:
+      RAILS_ENV: test
+      SERVER_DATABASE_HOST: localhost
 
 commands:
   server_setup:
     steps:
       - checkout
-      - restore_cache:
+      - ruby/install-deps:
+          app-dir: server
           key: << pipeline.parameters.server_cache_key >>
-      - run:
-          working_directory: server
-          command: bundle config set --local path << pipeline.parameters.server_cache_path >>
-      - run:
-          working_directory: server
-          command: bundle install
 
-server_job_attributes: &server_job_attributes
-  working_directory: << pipeline.parameters.application_home >>
-  docker:
-    - image: << pipeline.parameters.server_docker_image >>
+  db_setup:
+    steps:
+      - run: dockerize -wait tcp://localhost:5432 -timeout 30s
+      - run:
+          working_directory: server
+          command: bundle exec rails db:schema:load --trace
+
+  server_test:
+    steps:
+      - run:
+          working_directory: server
+          command: bundle exec rspec
 
 jobs:
   server_build:
-    <<: *server_job_attributes
-
+    executor: server
     steps:
       - server_setup
-      - save_cache:
-          key: << pipeline.parameters.server_cache_key >>
-          paths:
-            - << pipeline.parameters.server_cache_path >>
 
   server_code_analysis:
-    <<: *server_job_attributes
-
+    executor: server
     steps:
       - server_setup
-      - run:
-          working_directory: server
-          command: bundle exec rubocop
+      - ruby/rubocop-check:
+          app-dir: server
+
+  server_rspec_test:
+    executor: server_with_db
+    parallelism: 4
+    steps:
+      - server_setup
+      - db_setup
+      - server_test # Replace with `ruby/rspec-test` after the specs (tests) are not empty.
+                    # `ruby/rspec-test` can test in parallel, but there must be tests existing.
 
 workflows:
   server:
     jobs:
       - server_build
       - server_code_analysis:
+          requires:
+            - server_build
+      - server_rspec_test:
           requires:
             - server_build
