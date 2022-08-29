@@ -20,7 +20,7 @@ class ATLAS extends StatelessWidget {
               EntrancePage()),
       GoRoute(
           path: "/auth",
-          name: "auth page",
+          name: "Auth page",
           builder: (BuildContext context, GoRouterState state) => AuthPage())
     ],
   );
@@ -28,7 +28,9 @@ class ATLAS extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      theme: ThemeData.dark(),
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
       routeInformationProvider: _router.routeInformationProvider,
       routeInformationParser: _router.routeInformationParser,
       routerDelegate: _router.routerDelegate,
