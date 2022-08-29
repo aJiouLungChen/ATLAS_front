@@ -16,8 +16,8 @@ class GoogleSignInButton extends StatelessWidget {
         //GoogleSignInFlow().signIn();
       },
       style: ElevatedButton.styleFrom(
-        primary: AppColors.kSignInButtonBackgroundColor,
-        onPrimary: AppColors.kSignInButtonEffectColor,
+        primary: AppColors.white,
+        onPrimary: AppColors.grey,
         elevation: AppNumbers.kSignInButtonElevation,
       ),
       child: SizedBox(

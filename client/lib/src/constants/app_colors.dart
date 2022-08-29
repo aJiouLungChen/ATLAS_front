@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color kSignInButtonBackgroundColor = Colors.white;
-  static const Color kSignInButtonEffectColor = Colors.grey;
+  static const Color white = Colors.white;
+  static const Color grey = Colors.grey;
 }
