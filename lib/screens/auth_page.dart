@@ -1,6 +1,7 @@
 import 'package:client/server/networking.dart';
 import 'package:flutter/material.dart';
 import 'dart:html';
+import 'package:client/server/user_info.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -11,13 +12,14 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   late String code;
+  //late Future<UserInfo> user;
 
   @override
   void initState() {
     super.initState();
     Uri url = Uri.parse(window.location.href);
     code = url.queryParameters["code"].toString();
-    NetworkingService().fetchUserInfo(code);
+    NetworkingService().fetchUserInfo(code).then((value) => print(value.picture));
   }
 
   @override
