@@ -20,6 +20,7 @@ class _AuthPageState extends State<AuthPage> {
     Uri url = Uri.parse(window.location.href);
     code = url.queryParameters["code"].toString();
     NetworkingService().fetchUserInfo(code).then((value) => print(value.picture));
+    //aa
   }
 
   @override
