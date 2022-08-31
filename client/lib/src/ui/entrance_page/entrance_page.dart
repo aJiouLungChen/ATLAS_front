@@ -17,7 +17,7 @@ class _EntrancePageState extends State<EntrancePage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white, //??
+      color: Colors.white, //If run this app on the mobile's platform, it default background color is black
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
