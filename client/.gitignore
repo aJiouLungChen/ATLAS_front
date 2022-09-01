@@ -46,4 +46,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-#i18n don't upload
+#In this PR i18n don't need to upload
+lib/generated/*
+lib/l10n/*

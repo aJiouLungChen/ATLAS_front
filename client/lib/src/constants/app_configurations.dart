@@ -1,4 +1,4 @@
-class AppConfigurations{
+class AppConfigurations {
   static const String kImgPath = "images/btn_google_light_normal_ios.svg";
   static const String kAuthority = "accounts.google.com";
   static const String kUnEncodePath = "/o/oauth2/v2/auth";
