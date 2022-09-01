@@ -7,10 +7,11 @@ import 'package:client/generated/l10n.dart';
 
 void main() {
   setPathUrlStrategy();
-  runApp(ProviderScope(child: AtlasApp()));
+  runApp(const ProviderScope(child: AtlasApp()));
 }
 
 class AtlasApp extends ConsumerWidget {
+  const AtlasApp({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final atlasRouter = ref.watch(atlasRouterProvider);

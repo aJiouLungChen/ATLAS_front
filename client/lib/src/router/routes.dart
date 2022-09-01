@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 class AtlasRouter {
   AtlasRouter(this._read);
 
+  // ignore: unused_field
   final Reader _read;
 
   late final router = GoRouter(
@@ -16,11 +17,11 @@ class AtlasRouter {
           path: "/",
           name: entranceRouteName,
           builder: (BuildContext context, GoRouterState state) =>
-              EntrancePage()),
+              const EntrancePage()),
       GoRoute(
           path: "/auth",
           name: authRouteName,
-          builder: (BuildContext context, GoRouterState state) => AuthPage())
+          builder: (BuildContext context, GoRouterState state) => const AuthPage())
     ],
   );
 }

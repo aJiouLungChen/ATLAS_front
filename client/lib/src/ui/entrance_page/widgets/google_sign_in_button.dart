@@ -5,7 +5,7 @@ import 'package:client/src/constants/app_text_styles.dart';
 import 'package:client/src/constants/app_texts.dart';
 
 class GoogleSignInButton extends StatelessWidget {
-  const GoogleSignInButton({required this.googleSignInIconSvg});
+  const GoogleSignInButton({super.key, required this.googleSignInIconSvg});
 
   final Widget googleSignInIconSvg;
 

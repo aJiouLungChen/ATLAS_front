@@ -3,7 +3,7 @@ import 'package:client/src/constants/app_text_styles.dart';
 import 'package:client/src/constants/app_texts.dart';
 
 class Logo extends StatelessWidget {
-  const Logo({Key? key});
+  const Logo({super.key});
 
   @override
   Widget build(BuildContext context) {
