@@ -5,7 +5,7 @@ class AppConfigurations {
   static const String kResponseType = "code";
   static const String kClientId =
       "1068831372506-eqpgvmp11kj2rcdh9ce9of169pvbn8np.apps.googleusercontent.com";
-  static const String kRedirectUri = "http://localhost:58702/auth";
+  static const String kRedirectUri = "http://localhost:58702";
   static const String kScope = "profile email";
   static const String kFlowName = "GeneralOAuthFlow";
 }
